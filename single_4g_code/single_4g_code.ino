@@ -1,18 +1,11 @@
 #include <Arduino.h>
-#include <Wire.h>
+// #include <Wire.h>
 #include <SoftwareSerial.h>
 #include <PCA9554.h>  // Load the PCA9554 Library
-// PCA9554 ioCon1(0x21);
-#define REG_INPUT 0x00
-#define REG_OUTPUT 0x01
-#define REG_POLARITY 0x02
-#define REG_CONFIG 0x03
+#include "pca.h"
 
-#define PCA9554_ADDRec 0x20
-#define PCA9554_ADDR 0x21
-
-PCA9554 ioCon1(0x20);  // Create an object at this address   P6,P7 select pins on board P6 charge and P7 standby P6,P7 high 1
-PCA9554 ioCon2(0x21);  // Create an object at this address
+// PCA9554 ioCon1(0x20);  // Create an object at this address   P6,P7 select pins on board P6 charge and P7 standby P6,P7 high 1
+// PCA9554 ioCon2(0x21);  // Create an object at this address
 unsigned long start = 0;
 unsigned long start1 = 0;
 unsigned long prevMillis = 0;
@@ -29,34 +22,6 @@ byte reset_count = 20;
 byte serial_failure_count = 0;
 #define SERIAL_FAILURE_RESTART_CT 50
 
-void writeRegister(uint8_t reg, uint8_t value) {
-  Wire.beginTransmission(PCA9554_ADDR);
-  Wire.write(reg);
-  Wire.write(value);
-  Wire.endTransmission();
-}
-
-uint8_t readRegister(uint8_t reg) {
-  Wire.beginTransmission(PCA9554_ADDR);
-  Wire.write(reg);
-  Wire.endTransmission();
-  Wire.requestFrom(PCA9554_ADDR, 1);
-  return Wire.read();
-}
-void writeRegister_ec(uint8_t reg, uint8_t value) {
-  Wire.beginTransmission(PCA9554_ADDRec);
-  Wire.write(reg);
-  Wire.write(value);
-  Wire.endTransmission();
-}
-
-uint8_t readRegister_ec(uint8_t reg) {
-  Wire.beginTransmission(PCA9554_ADDRec);
-  Wire.write(reg);
-  Wire.endTransmission();
-  Wire.requestFrom(PCA9554_ADDRec, 1);
-  return Wire.read();
-}
 void wait(void) {
   uint32_t timeOut = 3000, timer = millis();  // increased timeout for slow responses
   char temp[200];
@@ -220,66 +185,7 @@ void loop() {
    Serial.print("attempt number: ");
    Serial.println(atcount);
   read_io();
-  // enable4GSerial();
-
-  // delay(200);
-  // writeRegister_ec(REG_CONFIG, 0x00);
-  // writeRegister_ec(REG_OUTPUT, 0x00);
-
-  // // ioCon1.portMode(ALLOUTPUT);  //Set the port as all output
-
-  // // ioCon1.digitalWrite(0, LOW);
-  // // ioCon1.digitalWrite(1, LOW);
-  // // ioCon1.digitalWrite(2, LOW);
-  // // ioCon1.digitalWrite(3, LOW);
-  // // ioCon1.digitalWrite(4, LOW);
-  // // ioCon1.digitalWrite(5, LOW);
-  // // ioCon1.digitalWrite(6, LOW);
-  // // ioCon1.digitalWrite(7, LOW);
-
-  // //delay(1000);kcj
-  // for (int i = 0; i < 15; i++) {
-  //   delay(100);
-  //   //     readFG();
-  //   read_io();
-  // }
-
-  // writeRegister_ec(REG_OUTPUT, 0x04);
-  // //   byte rdata;
-  // //   rdata = 0x04;
-  // // #define dip_addr 0x20
-  // //   Wire.beginTransmission(dip_addr);
-  // //   Wire.write((uint8_t)1);
-  // //   Wire.write((uint8_t)rdata);
-  // //   Wire.endTransmission();
-
-  // // ioCon1.digitalWrite(2, HIGH);//kcj 230109
-
-  // //delay(2200);//kcj
-  // for (int i = 0; i < 22; i++) {
-  //   delay(100);
-  //   //     readFG();
-  //   read_io();
-  // }
-  // writeRegister_ec(REG_OUTPUT, 0x00);
-  // // rdata = 0;
-  // // Wire.beginTransmission(dip_addr);
-  // // Wire.write((uint8_t)1);
-  // // Wire.write((uint8_t)rdata);
-  // // Wire.endTransmission();
-
-  // // ioCon1.digitalWrite(2, LOW);  //kcj 230109
-
-  // //delay(5000);  //kcj
-  // for (int i = 0; i < 10; i++) {
-  //   delay(100);
-  //   //     readFG();
-  //   read_io();
-  // }
-
-
-  // Serial.flush();
-  // while (Serial.available()) Serial.read();  // clear previous noise
+      
 while (Serial.available()) Serial.read();
   Serial.print("ATI\r\n");
   delay(100);
