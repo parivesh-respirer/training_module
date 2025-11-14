@@ -20,5 +20,8 @@ void writeRegister_ec(uint8_t reg, uint8_t value);
 
 uint8_t readRegister_ec(uint8_t reg);
 
-
+void init_pca_on_board_gpio();
+void read_io();
+void enableUARTSerial();
+void enable4GSerial();
 #endif
