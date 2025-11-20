@@ -65,10 +65,10 @@ void set_io() {
     rdata = rdata + 0x00;  //Hcho
 
   } else if (mux_select == 1) {
-    rdata = rdata + 0x40;  //EC200
+    rdata = rdata + 0xC0;  //EC200
 
   } else if (mux_select == 2) {
-    rdata = rdata + 0x80;  //
+    rdata = rdata + 0x40;  //
 
 
   } else if (mux_select == 3) {
@@ -78,6 +78,7 @@ void set_io() {
     rdata = rdata + 0xC0;  // default
   }
   //
+  // writeRegister(REG_CONFIG, 0x00);
   writeRegister(REG_OUTPUT, rdata);
 
   delay(200);                 // allow mux to settle
@@ -95,4 +96,9 @@ void enable4GSerial() {
   mux_select = 1;
   set_io();
   // Serial.begin(115200);
+}
+
+void switchop(){
+    mux_select = 2;
+  set_io();
 }
