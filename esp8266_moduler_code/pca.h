@@ -24,5 +24,5 @@ void init_pca_on_board_gpio();
 void read_io();
 void enableUARTSerial();
 void enable4GSerial();
-void switchop();
+void switch_to_op2();
 #endif

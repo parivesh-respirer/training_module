@@ -98,7 +98,7 @@ void enable4GSerial() {
   // Serial.begin(115200);
 }
 
-void switchop(){
+void switch_to_op2(){
     mux_select = 2;
   set_io();
 }

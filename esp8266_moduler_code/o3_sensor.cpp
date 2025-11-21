@@ -1,6 +1,7 @@
 #include "o3_sensor.h"
 #include <Arduino.h>
 #include "Wire.h"
+# include "pca.h"
 
 int16_t readADS1115(uint16_t config) {
   // Step 1: Write config register
@@ -38,9 +39,28 @@ float read_o3_op1(){
       Serial.print("ADC = ");
       Serial.print(adc);
       Serial.print("   Voltage = ");
-      Serial.println(voltage);
+      Serial.println(voltage,3);
       
 return voltage;
       // delay(500);
 }
-float read_o3_op2();
+float read_o3_op2(){
+      switch_to_op2();
+uint16_t config =
+          0x8000 |  // OS = 1 (start conversion)
+          0x7000 |  // MUX = AIN3
+          0x0000 |  // PGA = ±4.096V
+          0x0100 |  // MODE = single shot
+          0x0080;   // 128 SPS
+
+      int16_t adc = readADS1115(config);
+
+      float voltage = (adc * 6.144) / 32768.00;
+
+      Serial.print("ADC = ");
+      Serial.print(adc);
+      Serial.print("   Voltage = ");
+      Serial.println(voltage,3);
+      enable4GSerial();
+      return voltage;
+}

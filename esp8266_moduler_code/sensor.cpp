@@ -15,10 +15,10 @@ void formSensorData()
   // int pm25 = 40, pm10 = 38;
   // float op1 = 34.55;
   float op1 = read_o3_op1();
-  float op2 = 45.76;
+  float op2 = read_o3_op2();
 
 sprintf(stream_buffer_arr + strlen(stream_buffer_arr),
-        "&pm1cnc=%d&pm2.5cnc=%d&pm10cnc=%d&o3op1=%0.2f&o3op2=%0.2f",
+        "&pm1cnc=%d&pm2.5cnc=%d&pm10cnc=%d&o3op1=%0.3f&o3op2=%0.3f",
         pm1, pm25, pm10, op1, op2);
 
 //     sprintf(stream_buffer_arr + strlen(stream_buffer_arr), "&kafka_topic=airview");
