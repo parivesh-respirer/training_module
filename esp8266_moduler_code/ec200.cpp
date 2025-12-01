@@ -4,6 +4,7 @@
 #include <string.h>
 #include "sensor.h"
 #include <stdio.h>
+#include "wifi_config.h"
 
 char stream_buffer_arr[650];
 unsigned long start = millis();
@@ -269,7 +270,25 @@ void sendDataToServer() {
 
   sprintf(stream_buffer_arr + strlen(stream_buffer_arr), "http://api.urbansciences.in:80/quartz/rawdata?");
   strcat(stream_buffer_arr, "&imei=");
-  strcat(stream_buffer_arr, "C8C9A3929102");
+  strcat(stream_buffer_arr,getMacAddress().c_str());
+
   formSensorData();
-  sendDataEC200();
+   if (WiFi.status() == WL_CONNECTED) {
+      HTTPClient http;
+      http.begin("http://api.urbansciences.in:80/quartz/bulk_rawdata");
+      http.addHeader("Content-Type", "application/json");
+      http.setTimeout(5000);
+  Serial.print("Payload: ");
+  Serial.println(payload);
+
+      int code = http.POST(payload);
+      Serial.print("HTTP Response Code: ");
+      Serial.println(code);
+
+      http.end();
+      Serial.println("sent through wifi....");
+   }else{
+sendDataEC200();
+   }
+  
 }

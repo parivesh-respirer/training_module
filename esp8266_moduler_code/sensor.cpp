@@ -2,13 +2,14 @@
 #include <stdio.h> 
 #include <Arduino.h>
 #include "o3_sensor.h"
+#include "wifi_config.h"
 
-
+String payload;
 
 void formSensorData()
 {  
   // make_pms_array_zero();
-  readPMS();
+  // readPMS();
   int16_t pm1 = read_pm1_sensor_value();
    int16_t pm25 = read_pm25_sensor_value();
     int16_t pm10 = read_pm10_sensor_value();
@@ -21,6 +22,30 @@ sprintf(stream_buffer_arr + strlen(stream_buffer_arr),
         "&pm1cnc=%d&pm2.5cnc=%d&pm10cnc=%d&o3op1=%0.3f&o3op2=%0.3f",
         pm1, pm25, pm10, op1, op2);
 
+
+  payload = String("[{\"imei\":\"") + getMacAddress()
+                  //  + "\",\"timestr2\":\"" + getFormattedTime1()
+                   + "\",\"pm1cnc\":\"" + String(pm1)
+                   + "\",\"pm2.5cnc\":\"" + String(pm25)
+                   + "\",\"pm10cnc\":\"" + String(pm10)
+                  //  + "\",\"pm2.5cnc_cf1\":\"" + String(pm25cf1)
+                  //  + "\",\"pm1cnc_cf1\":\"" + String(pm1cf1)
+                  //  + "\",\"pm10cnc_cf1\":\"" + String(pm10cf1)
+                  //  + "\",\"pm1cnc_alt\":\"" + String(pm1_alt, 2)
+                  //  + "\",\"pm2.5cnc_alt\":\"" + String(pm25_alt, 2)
+                  //  + "\",\"pm10cnc_alt\":\"" + String(pm10_alt, 2)                   
+                  //  + "\",\"tvocconc\":\"" + String(num)
+                  //  + "\",\"pm1cnt\":\"" + String(cnt1)
+                  //  + "\",\"pm0.3cnt\":\"" + String(cnt03)             
+                  //  + "\",\"pm0.5cnt\":\"" + String(cnt05)     
+                  //  + "\",\"pm2.5cnt\":\"" + String(cnt25)             
+                  //  + "\",\"pm5cnt\":\"" + String(cnt5)         
+                  //  + "\",\"pm10cnt\":\"" + String(cnt10)     
+                   + "\",\"o3op1\":\"" + String(op1,3)
+                   + "\",\"o3op2\":\"" + String(op2,3)                                            
+                   + "\"}]";
+  // Serial.print("Payload: ");
+  // Serial.println(payload);
 //     sprintf(stream_buffer_arr + strlen(stream_buffer_arr), "&kafka_topic=airview");
 //     sprintf(stream_buffer_arr + strlen(stream_buffer_arr), "&temp=%0.1f&humidity=%0.1f&pres=%d&altd=%d", temp_avg, humd_avg, pres_avg / 100, altd_avg);
     // sprintf(stream_buffer_arr + strlen(stream_buffer_arr), "&pm1cnc=%d&pm2.5cnc=%d&pm10cnc=%d&pm0.3cnt=%d&pm0.5cnt=%d&pm1cnt=%d&pm2.5cnt=%d&pm5cnt=%d&pm10cnt=%d", pm1cnc_avg, pm25cnc_avg, pm10cnc_avg, pm03cnt_avg, pm05cnt_avg, pm1cnt_avg, pm25cnt_avg, pm5cnt_avg, pm10cnt_avg);

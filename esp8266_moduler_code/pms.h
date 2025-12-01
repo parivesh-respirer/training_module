@@ -7,7 +7,7 @@
 extern SoftwareSerial pmsSerial;
 
 void initPMS();
-void readPMS();
+void readPMS(void);
 void make_pms_array_zero();
 int16_t read_pm1_sensor_value();
 int16_t read_pm25_sensor_value();
